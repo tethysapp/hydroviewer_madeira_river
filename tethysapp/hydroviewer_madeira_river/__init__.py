@@ -1,1 +1,1 @@
-# Included for native namespace package support
+# this is a namespace package
