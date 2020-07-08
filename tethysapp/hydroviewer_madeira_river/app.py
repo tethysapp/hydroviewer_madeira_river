@@ -6,13 +6,13 @@ class HistoricalValidationToolColombia(TethysAppBase):
     Tethys app class for Historical Validation Tool Colombia.
     """
 
-    name = 'Historical Validation Tool Colombia'
+    name = 'Hydroviewer Madeira'
     index = 'hydroviewer_madeira_river:home'
-    icon = 'hydroviewer_madeira_river/images/historic_validation_colombia_logo.png'
+    icon = 'hydroviewer_madeira_river/images/byu_logo.png'
     package = 'hydroviewer_madeira_river'
     root_url = 'hydroviewer-madeira-river'
     color = '#002255'
-    description = 'This app evaluates the accuracy for the historical streamflow values obtained from Streamflow Prediction Tool in Colombia.'
+    description = 'This app evaluates the accuracy for the historical streamflow values obtained from Streamflow Prediction Tool in Madeira.'
     tags = ''
     enable_feedback = False
     feedback_emails = []
