@@ -8,7 +8,7 @@ class HistoricalValidationToolColombia(TethysAppBase):
 
     name = 'Hydroviewer Madeira'
     index = 'hydroviewer_madeira_river:home'
-    icon = 'hydroviewer_madeira_river/images/byu_logo.png'
+    icon = 'hydroviewer_madeira_river/images/icon.gif'
     package = 'hydroviewer_madeira_river'
     root_url = 'hydroviewer-madeira-river'
     color = '#002255'
