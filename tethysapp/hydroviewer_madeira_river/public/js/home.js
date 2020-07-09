@@ -33,10 +33,8 @@ function init_map() {
 
 	var streams = new ol.layer.Image({
 		source: new ol.source.ImageWMS({
-			url: 'https://tethys2.byu.edu/geoserver/colombia_hydroviewer/wms',
-			//url: 'https://tethys.byu.edu/geoserver/colombia_hydroviewer/wms',
-			//params: { 'LAYERS': 'south_america-colombia-drainage_line' },
-			params: { 'LAYERS': 'south_america-colombia-geoglows-drainage_line' },
+			url: 'https://geoserver.hydroshare.org/geoserver/HS-7178e909b4824df29a87930f51ccaa9b/wms',
+			params: { 'LAYERS': 'madeira_drainageline' },
 			serverType: 'geoserver',
 			crossOrigin: 'Anonymous'
 		}),
@@ -45,10 +43,8 @@ function init_map() {
 
 	var stations = new ol.layer.Image({
 		source: new ol.source.ImageWMS({
-			url: 'https://tethys2.byu.edu/geoserver/colombia_hydroviewer/wms',
-			//url: 'https://tethys.byu.edu/geoserver/colombia_hydroviewer/wms',
-			//params: { 'LAYERS': 'IDEAM_Stations' },
-			params: { 'LAYERS': 'IDEAM_Stations_v2' },
+			url: 'https://geoserver.hydroshare.org/geoserver/HS-7178e909b4824df29a87930f51ccaa9b/wms',
+			params: { 'LAYERS': 'madeira_stations' },
 			serverType: 'geoserver',
 			crossOrigin: 'Anonymous'
 		})
@@ -59,16 +55,15 @@ function init_map() {
 	map = new ol.Map({
 		target: 'map',
 		layers: [base_layer, streams, stations],
-		view: new ol.View({
-			center: ol.proj.fromLonLat([-74.08083, 4.598889]),
-			zoom: 5
-		})
+		//view: new ol.View({
+		//	center: ol.proj.fromLonLat([-74.08083, -4.598889]),
+		//	zoom: 5
+		//})
 	});
 
 }
 
-let ajax_url = 'https://tethys2.byu.edu/geoserver/colombia_hydroviewer/wfs?request=GetCapabilities';
-//let ajax_url = 'https://tethys.byu.edu/geoserver/colombia_hydroviewer/wfs?request=GetCapabilities';
+let ajax_url = 'https://geoserver.hydroshare.org/geoserver/HS-7178e909b4824df29a87930f51ccaa9b/wfs?request=GetCapabilities';
 
 let capabilities = $.ajax(ajax_url, {
 	type: 'GET',
@@ -81,8 +76,7 @@ let capabilities = $.ajax(ajax_url, {
 	success: function() {
 		let x = capabilities.responseText
 		.split('<FeatureTypeList>')[1]
-		//.split('colombia_hydroviewer:south_america-colombia-drainage_line')[1]
-		.split('colombia_hydroviewer:south_america-colombia-geoglows-drainage_line')[1]
+		.split('HS-7178e909b4824df29a87930f51ccaa9b:madeira_drainageline')[1]
 		.split('LatLongBoundingBox ')[1]
 		.split('/></FeatureType>')[0];
 
@@ -750,11 +744,11 @@ function map_events() {
 		         		//subbasin = 'continental' //OJO buscar como hacerla generica
 		         		subbasin = 'geoglows' //OJO buscar como hacerla generica
 		         		var startdate = '';
-		         		stationcode = result["features"][0]["properties"]["ID"];
-		         		stationname = result["features"][0]["properties"]["Name"];
+		         		stationcode = result["features"][0]["properties"]["CodEstacao"];
+		         		stationname = result["features"][0]["properties"]["NomeEstaca"];
 		         		//streamcomid = result["features"][0]["properties"]["COMID"];
 		         		streamcomid = result["features"][0]["properties"]["new_COMID"];
-		         		stream = result["features"][0]["properties"]["Stream_Nam"];
+		         		stream = result["features"][0]["properties"]["NomeRio"];
 		         		$("#station-info").append('<h3 id="Station-Name-Tab">Current Station: '+ stationname
                         			+ '</h3><h5 id="Station-Code-Tab">Station Code: '
                         			+ stationcode + '</h3><h5 id="COMID-Tab">Station COMID: '
