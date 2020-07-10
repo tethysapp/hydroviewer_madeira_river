@@ -2099,7 +2099,7 @@ def get_monthlyAverages(request):
         observed_df.index = observed_df.index.to_series().dt.strftime("%Y-%m-%d")
 
         observed_df.index = pd.to_datetime(observed_df.index)
-        
+
 
         '''Correct the Bias in Sumulation'''
 
@@ -4448,105 +4448,375 @@ def get_time_series(request):
         hydroviewer_figure = geoglows.plots.hydroviewer(forecast_record, forecast_df, forecast_ensembles)
 
         '''Getting real time observed data'''
-        url_rt = 'http://fews.ideam.gov.co/colombia/jsonQ/00' + codEstacion + 'Qobs.json'
-        f = requests.get(url_rt, verify=False)
+        now = dt.datetime.now()
+        YYYY = str(now.year)
+        MM = str(now.month)
+        DD = now.day
 
-        if f.status_code == 200:
-            data = f.json()
+        url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao={0}&DataInicio=01/01/1900&DataFim={1}/{2}/{3}&tipoDados=3&nivelConsistencia=1'.format(
+            codEstacion, DD, MM, YYYY)
 
-            observedDischarge = (data.get('obs'))
-            sensorDischarge = (data.get('sen'))
+        response = requests.get(url, verify=False)
 
-            observedDischarge = (observedDischarge.get('data'))
-            sensorDischarge = (sensorDischarge.get('data'))
+        soup = BeautifulSoup(response.content, "xml")
+        times = soup.find_all('DataHora')
+        valuesDay01 = soup.find_all('Vazao01')
+        valuesDay02 = soup.find_all('Vazao02')
+        valuesDay03 = soup.find_all('Vazao03')
+        valuesDay04 = soup.find_all('Vazao04')
+        valuesDay05 = soup.find_all('Vazao05')
+        valuesDay06 = soup.find_all('Vazao06')
+        valuesDay07 = soup.find_all('Vazao07')
+        valuesDay08 = soup.find_all('Vazao08')
+        valuesDay09 = soup.find_all('Vazao09')
+        valuesDay10 = soup.find_all('Vazao10')
+        valuesDay11 = soup.find_all('Vazao11')
+        valuesDay12 = soup.find_all('Vazao12')
+        valuesDay13 = soup.find_all('Vazao13')
+        valuesDay14 = soup.find_all('Vazao14')
+        valuesDay15 = soup.find_all('Vazao15')
+        valuesDay16 = soup.find_all('Vazao16')
+        valuesDay17 = soup.find_all('Vazao17')
+        valuesDay18 = soup.find_all('Vazao18')
+        valuesDay19 = soup.find_all('Vazao19')
+        valuesDay20 = soup.find_all('Vazao20')
+        valuesDay21 = soup.find_all('Vazao21')
+        valuesDay22 = soup.find_all('Vazao22')
+        valuesDay23 = soup.find_all('Vazao23')
+        valuesDay24 = soup.find_all('Vazao24')
+        valuesDay25 = soup.find_all('Vazao25')
+        valuesDay26 = soup.find_all('Vazao26')
+        valuesDay27 = soup.find_all('Vazao27')
+        valuesDay28 = soup.find_all('Vazao28')
+        valuesDay29 = soup.find_all('Vazao29')
+        valuesDay30 = soup.find_all('Vazao30')
+        valuesDay31 = soup.find_all('Vazao31')
 
-            datesObservedDischarge = [row[0] for row in observedDischarge]
-            observedDischarge = [row[1] for row in observedDischarge]
+        monthly__time = []
+        values01 = []
+        values02 = []
+        values03 = []
+        values04 = []
+        values05 = []
+        values06 = []
+        values07 = []
+        values08 = []
+        values09 = []
+        values10 = []
+        values11 = []
+        values12 = []
+        values13 = []
+        values14 = []
+        values15 = []
+        values16 = []
+        values17 = []
+        values18 = []
+        values19 = []
+        values20 = []
+        values21 = []
+        values22 = []
+        values23 = []
+        values24 = []
+        values25 = []
+        values26 = []
+        values27 = []
+        values28 = []
+        values29 = []
+        values30 = []
+        values31 = []
 
-            datesSensorDischarge = [row[0] for row in sensorDischarge]
-            sensorDischarge = [row[1] for row in sensorDischarge]
+        for i in range(0, len(times)):
+            monthlyTime = times[i].next
+            monthly__time.append(monthlyTime)
+            value01 = valuesDay01[i].next
+            values01.append(value01)
+            value02 = valuesDay02[i].next
+            values02.append(value02)
+            value03 = valuesDay03[i].next
+            values03.append(value03)
+            value04 = valuesDay04[i].next
+            values04.append(value04)
+            value05 = valuesDay05[i].next
+            values05.append(value05)
+            value06 = valuesDay06[i].next
+            values06.append(value06)
+            value07 = valuesDay07[i].next
+            values07.append(value07)
+            value08 = valuesDay08[i].next
+            values08.append(value08)
+            value09 = valuesDay09[i].next
+            values09.append(value09)
+            value10 = valuesDay10[i].next
+            values10.append(value10)
+            value11 = valuesDay11[i].next
+            values11.append(value11)
+            value12 = valuesDay12[i].next
+            values12.append(value12)
+            value13 = valuesDay13[i].next
+            values13.append(value13)
+            value14 = valuesDay14[i].next
+            values14.append(value14)
+            value15 = valuesDay15[i].next
+            values15.append(value15)
+            value16 = valuesDay16[i].next
+            values16.append(value16)
+            value17 = valuesDay17[i].next
+            values17.append(value17)
+            value18 = valuesDay18[i].next
+            values18.append(value18)
+            value19 = valuesDay19[i].next
+            values19.append(value19)
+            value20 = valuesDay20[i].next
+            values20.append(value20)
+            value21 = valuesDay21[i].next
+            values21.append(value21)
+            value22 = valuesDay22[i].next
+            values22.append(value22)
+            value23 = valuesDay23[i].next
+            values23.append(value23)
+            value24 = valuesDay24[i].next
+            values24.append(value24)
+            value25 = valuesDay25[i].next
+            values25.append(value25)
+            value26 = valuesDay26[i].next
+            values26.append(value26)
+            value27 = valuesDay27[i].next
+            values27.append(value27)
+            value28 = valuesDay28[i].next
+            values28.append(value28)
+            value29 = valuesDay29[i].next
+            values29.append(value29)
+            value30 = valuesDay30[i].next
+            values30.append(value30)
+            value31 = valuesDay31[i].next
+            values31.append(value31)
 
-            dates = []
-            discharge = []
+        daily_time = []
+        monthly_time = []
 
-            for i in range(0, len(datesObservedDischarge) - 1):
-                year = int(datesObservedDischarge[i][0:4])
-                month = int(datesObservedDischarge[i][5:7])
-                day = int(datesObservedDischarge[i][8:10])
-                hh = int(datesObservedDischarge[i][11:13])
-                mm = int(datesObservedDischarge[i][14:16])
-                dates.append(dt.datetime(year, month, day, hh, mm))
-                discharge.append(observedDischarge[i])
+        for i in range(0, len(monthly__time)):
+            year = int(monthly__time[i][0:4])
+            month = int(monthly__time[i][5:7])
+            day = int(monthly__time[i][8:10])
+            if day != 1:
+                day = 1
+            hh = int(monthly__time[i][11:13])
+            mm = int(monthly__time[i][14:16])
+            ss = int(monthly__time[i][17:19])
+            monthlyTime = dt.datetime(year, month, day, hh, mm)
+            monthly_time.append(monthlyTime)
+            if month == 1:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 2:
+                if calendar.isleap(year):
+                    for j in range(0, 29):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+                else:
+                    for j in range(0, 28):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+            elif month == 3:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 4:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 5:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 6:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 7:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 8:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 9:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 10:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 11:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 12:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
 
-            datesObservedDischarge = dates
-            observedDischarge = discharge
+        dischargeValues = []
 
-            dates = []
-            discharge = []
+        for date in daily_time:
+            if date.day == 1:
+                discharge = values01[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 2:
+                discharge = values02[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 1, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 3:
+                discharge = values03[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 2, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 4:
+                discharge = values04[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 3, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 5:
+                discharge = values05[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 4, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 6:
+                discharge = values06[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 5, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 7:
+                discharge = values07[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 6, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 8:
+                discharge = values08[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 7, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 9:
+                discharge = values09[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 8, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 10:
+                discharge = values10[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 9, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 11:
+                discharge = values11[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 10, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 12:
+                discharge = values12[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 11, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 13:
+                discharge = values13[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 12, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 14:
+                discharge = values14[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 13, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 15:
+                discharge = values15[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 14, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 16:
+                discharge = values16[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 15, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 17:
+                discharge = values17[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 16, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 18:
+                discharge = values18[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 17, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 19:
+                discharge = values19[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 18, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 20:
+                discharge = values20[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 19, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 21:
+                discharge = values21[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 20, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 22:
+                discharge = values22[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 21, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 23:
+                discharge = values23[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 22, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 24:
+                discharge = values24[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 23, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 25:
+                discharge = values25[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 24, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 26:
+                discharge = values26[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 25, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 27:
+                discharge = values27[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 26, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 28:
+                discharge = values28[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 27, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 29:
+                discharge = values29[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 28, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 30:
+                discharge = values30[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 29, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 31:
+                discharge = values31[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 30, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
 
-            for i in range(0, len(datesSensorDischarge) - 1):
-                year = int(datesSensorDischarge[i][0:4])
-                month = int(datesSensorDischarge[i][5:7])
-                day = int(datesSensorDischarge[i][8:10])
-                hh = int(datesSensorDischarge[i][11:13])
-                mm = int(datesSensorDischarge[i][14:16])
-                dates.append(dt.datetime(year, month, day, hh, mm))
-                discharge.append(sensorDischarge[i])
+        pairs = [list(a) for a in zip(daily_time, dischargeValues)]
+        pairs = sorted(pairs, key=lambda x: x[0])
 
-            datesSensorDischarge = dates
-            sensorDischarge = discharge
+        observed_rt = pd.DataFrame(pairs, columns=['Datetime', 'Observed Streamflow'])
+        observed_rt.set_index('Datetime', inplace=True)
+        observed_rt = observed_rt.replace(r'^\s*$', np.NaN, regex=True)
+        observed_rt["Observed Streamflow"] = pd.to_numeric(observed_rt["Observed Streamflow"], downcast="float")
 
-            try:
-                # convert request into pandas DF
-                pairs = [list(a) for a in zip(datesObservedDischarge, observedDischarge)]
-                observed_rt = pd.DataFrame(pairs, columns=['Datetime', 'Observed (m3/s)'])
-                observed_rt.set_index('Datetime', inplace=True)
-                observed_rt = observed_rt.dropna()
-                observed_rt = observed_rt.groupby(observed_rt.index.strftime("%Y/%m/%d")).mean()
-                observed_rt.index = pd.to_datetime(observed_rt.index)
-                observed_rt.index = observed_rt.index.tz_localize('UTC')
-                observed_rt = observed_rt.loc[
-                    observed_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
-                observed_rt = observed_rt.dropna()
+        observed_rt[observed_rt < 0] = 0
 
-                if len(observed_rt.index) > 0:
-                    hydroviewer_figure.add_trace(go.Scatter(
-                        name='Observed Streamflow',
-                        x=observed_rt.index,
-                        y=observed_rt.iloc[:, 0].values,
-                        line=dict(
-                            color='green',
-                        )
-                    ))
+        observed_rt.index = observed_rt.index.to_series().dt.strftime("%Y-%m-%d")
 
-            except:
-                print('Not observed data for the selected station')
+        observed_rt.index = pd.to_datetime(observed_rt.index)
 
-            try:
-                # convert request into pandas DF
-                pairs = [list(a) for a in zip(datesSensorDischarge, sensorDischarge)]
-                sensor_rt = pd.DataFrame(pairs, columns=['Datetime', 'Sensor (m3/s)'])
-                sensor_rt.set_index('Datetime', inplace=True)
-                sensor_rt = sensor_rt.dropna()
-                sensor_rt = sensor_rt.groupby(sensor_rt.index.strftime("%Y/%m/%d")).mean()
-                sensor_rt.index = pd.to_datetime(sensor_rt.index)
-                sensor_rt.index = sensor_rt.index.tz_localize('UTC')
-                sensor_rt = sensor_rt.loc[
-                    sensor_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
-                sensor_rt = sensor_rt.dropna()
+        observed_rt = observed_rt.dropna()
+        observed_rt = observed_rt.groupby(observed_rt.index.strftime("%Y/%m/%d")).mean()
+        observed_rt.index = pd.to_datetime(observed_rt.index)
+        observed_rt.index = observed_rt.index.tz_localize('UTC')
+        observed_rt = observed_rt.loc[observed_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
+        observed_rt = observed_rt.dropna()
 
-                if len(sensor_rt.index) > 0:
-                    hydroviewer_figure.add_trace(go.Scatter(
-                        name='Sensor Streamflow',
-                        x=sensor_rt.index,
-                        y=sensor_rt.iloc[:, 0].values,
-                        line=dict(
-                            color='yellow',
-                        )
-                    ))
-
-            except:
-                print('Not sensor data for the selected station')
+        if len(observed_rt.index) > 0:
+            hydroviewer_figure.add_trace(go.Scatter(
+                name='Observed Streamflow',
+                x=observed_rt.index,
+                y=observed_rt.iloc[:, 0].values,
+                line=dict(
+                    color='green',
+                )
+            ))
 
         chart_obj = PlotlyView(hydroviewer_figure)
 
@@ -4959,106 +5229,376 @@ def get_time_series_bc(request):
 
         hydroviewer_figure = geoglows.plots.hydroviewer(fixed_records, fixed_stats, fixed_ensembles)
 
-        # Getting real time observed data
-        url_rt = 'http://fews.ideam.gov.co/colombia/jsonQ/00' + codEstacion + 'Qobs.json'
-        f = requests.get(url_rt, verify=False)
+        '''Getting real time observed data'''
+        now = dt.datetime.now()
+        YYYY = str(now.year)
+        MM = str(now.month)
+        DD = now.day
 
-        if f.status_code == 200:
-            data = f.json()
+        url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao={0}&DataInicio=01/01/1900&DataFim={1}/{2}/{3}&tipoDados=3&nivelConsistencia=1'.format(
+            codEstacion, DD, MM, YYYY)
 
-            observedDischarge = (data.get('obs'))
-            sensorDischarge = (data.get('sen'))
+        response = requests.get(url, verify=False)
 
-            observedDischarge = (observedDischarge.get('data'))
-            sensorDischarge = (sensorDischarge.get('data'))
+        soup = BeautifulSoup(response.content, "xml")
+        times = soup.find_all('DataHora')
+        valuesDay01 = soup.find_all('Vazao01')
+        valuesDay02 = soup.find_all('Vazao02')
+        valuesDay03 = soup.find_all('Vazao03')
+        valuesDay04 = soup.find_all('Vazao04')
+        valuesDay05 = soup.find_all('Vazao05')
+        valuesDay06 = soup.find_all('Vazao06')
+        valuesDay07 = soup.find_all('Vazao07')
+        valuesDay08 = soup.find_all('Vazao08')
+        valuesDay09 = soup.find_all('Vazao09')
+        valuesDay10 = soup.find_all('Vazao10')
+        valuesDay11 = soup.find_all('Vazao11')
+        valuesDay12 = soup.find_all('Vazao12')
+        valuesDay13 = soup.find_all('Vazao13')
+        valuesDay14 = soup.find_all('Vazao14')
+        valuesDay15 = soup.find_all('Vazao15')
+        valuesDay16 = soup.find_all('Vazao16')
+        valuesDay17 = soup.find_all('Vazao17')
+        valuesDay18 = soup.find_all('Vazao18')
+        valuesDay19 = soup.find_all('Vazao19')
+        valuesDay20 = soup.find_all('Vazao20')
+        valuesDay21 = soup.find_all('Vazao21')
+        valuesDay22 = soup.find_all('Vazao22')
+        valuesDay23 = soup.find_all('Vazao23')
+        valuesDay24 = soup.find_all('Vazao24')
+        valuesDay25 = soup.find_all('Vazao25')
+        valuesDay26 = soup.find_all('Vazao26')
+        valuesDay27 = soup.find_all('Vazao27')
+        valuesDay28 = soup.find_all('Vazao28')
+        valuesDay29 = soup.find_all('Vazao29')
+        valuesDay30 = soup.find_all('Vazao30')
+        valuesDay31 = soup.find_all('Vazao31')
 
-            datesObservedDischarge = [row[0] for row in observedDischarge]
-            observedDischarge = [row[1] for row in observedDischarge]
+        monthly__time = []
+        values01 = []
+        values02 = []
+        values03 = []
+        values04 = []
+        values05 = []
+        values06 = []
+        values07 = []
+        values08 = []
+        values09 = []
+        values10 = []
+        values11 = []
+        values12 = []
+        values13 = []
+        values14 = []
+        values15 = []
+        values16 = []
+        values17 = []
+        values18 = []
+        values19 = []
+        values20 = []
+        values21 = []
+        values22 = []
+        values23 = []
+        values24 = []
+        values25 = []
+        values26 = []
+        values27 = []
+        values28 = []
+        values29 = []
+        values30 = []
+        values31 = []
 
-            datesSensorDischarge = [row[0] for row in sensorDischarge]
-            sensorDischarge = [row[1] for row in sensorDischarge]
+        for i in range(0, len(times)):
+            monthlyTime = times[i].next
+            monthly__time.append(monthlyTime)
+            value01 = valuesDay01[i].next
+            values01.append(value01)
+            value02 = valuesDay02[i].next
+            values02.append(value02)
+            value03 = valuesDay03[i].next
+            values03.append(value03)
+            value04 = valuesDay04[i].next
+            values04.append(value04)
+            value05 = valuesDay05[i].next
+            values05.append(value05)
+            value06 = valuesDay06[i].next
+            values06.append(value06)
+            value07 = valuesDay07[i].next
+            values07.append(value07)
+            value08 = valuesDay08[i].next
+            values08.append(value08)
+            value09 = valuesDay09[i].next
+            values09.append(value09)
+            value10 = valuesDay10[i].next
+            values10.append(value10)
+            value11 = valuesDay11[i].next
+            values11.append(value11)
+            value12 = valuesDay12[i].next
+            values12.append(value12)
+            value13 = valuesDay13[i].next
+            values13.append(value13)
+            value14 = valuesDay14[i].next
+            values14.append(value14)
+            value15 = valuesDay15[i].next
+            values15.append(value15)
+            value16 = valuesDay16[i].next
+            values16.append(value16)
+            value17 = valuesDay17[i].next
+            values17.append(value17)
+            value18 = valuesDay18[i].next
+            values18.append(value18)
+            value19 = valuesDay19[i].next
+            values19.append(value19)
+            value20 = valuesDay20[i].next
+            values20.append(value20)
+            value21 = valuesDay21[i].next
+            values21.append(value21)
+            value22 = valuesDay22[i].next
+            values22.append(value22)
+            value23 = valuesDay23[i].next
+            values23.append(value23)
+            value24 = valuesDay24[i].next
+            values24.append(value24)
+            value25 = valuesDay25[i].next
+            values25.append(value25)
+            value26 = valuesDay26[i].next
+            values26.append(value26)
+            value27 = valuesDay27[i].next
+            values27.append(value27)
+            value28 = valuesDay28[i].next
+            values28.append(value28)
+            value29 = valuesDay29[i].next
+            values29.append(value29)
+            value30 = valuesDay30[i].next
+            values30.append(value30)
+            value31 = valuesDay31[i].next
+            values31.append(value31)
 
-            dates = []
-            discharge = []
+        daily_time = []
+        monthly_time = []
 
-            for i in range(0, len(datesObservedDischarge) - 1):
-                year = int(datesObservedDischarge[i][0:4])
-                month = int(datesObservedDischarge[i][5:7])
-                day = int(datesObservedDischarge[i][8:10])
-                hh = int(datesObservedDischarge[i][11:13])
-                mm = int(datesObservedDischarge[i][14:16])
-                dates.append(dt.datetime(year, month, day, hh, mm))
-                discharge.append(observedDischarge[i])
+        for i in range(0, len(monthly__time)):
+            year = int(monthly__time[i][0:4])
+            month = int(monthly__time[i][5:7])
+            day = int(monthly__time[i][8:10])
+            if day != 1:
+                day = 1
+            hh = int(monthly__time[i][11:13])
+            mm = int(monthly__time[i][14:16])
+            ss = int(monthly__time[i][17:19])
+            monthlyTime = dt.datetime(year, month, day, hh, mm)
+            monthly_time.append(monthlyTime)
+            if month == 1:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 2:
+                if calendar.isleap(year):
+                    for j in range(0, 29):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+                else:
+                    for j in range(0, 28):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+            elif month == 3:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 4:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 5:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 6:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 7:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 8:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 9:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 10:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 11:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 12:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
 
-            datesObservedDischarge = dates
-            observedDischarge = discharge
+        dischargeValues = []
 
-            dates = []
-            discharge = []
+        for date in daily_time:
+            if date.day == 1:
+                discharge = values01[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 2:
+                discharge = values02[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 1, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 3:
+                discharge = values03[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 2, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 4:
+                discharge = values04[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 3, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 5:
+                discharge = values05[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 4, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 6:
+                discharge = values06[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 5, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 7:
+                discharge = values07[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 6, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 8:
+                discharge = values08[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 7, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 9:
+                discharge = values09[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 8, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 10:
+                discharge = values10[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 9, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 11:
+                discharge = values11[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 10, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 12:
+                discharge = values12[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 11, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 13:
+                discharge = values13[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 12, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 14:
+                discharge = values14[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 13, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 15:
+                discharge = values15[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 14, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 16:
+                discharge = values16[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 15, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 17:
+                discharge = values17[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 16, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 18:
+                discharge = values18[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 17, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 19:
+                discharge = values19[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 18, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 20:
+                discharge = values20[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 19, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 21:
+                discharge = values21[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 20, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 22:
+                discharge = values22[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 21, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 23:
+                discharge = values23[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 22, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 24:
+                discharge = values24[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 23, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 25:
+                discharge = values25[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 24, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 26:
+                discharge = values26[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 25, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 27:
+                discharge = values27[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 26, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 28:
+                discharge = values28[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 27, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 29:
+                discharge = values29[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 28, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 30:
+                discharge = values30[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 29, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 31:
+                discharge = values31[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 30, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
 
-            for i in range(0, len(datesSensorDischarge) - 1):
-                year = int(datesSensorDischarge[i][0:4])
-                month = int(datesSensorDischarge[i][5:7])
-                day = int(datesSensorDischarge[i][8:10])
-                hh = int(datesSensorDischarge[i][11:13])
-                mm = int(datesSensorDischarge[i][14:16])
-                dates.append(dt.datetime(year, month, day, hh, mm))
-                discharge.append(sensorDischarge[i])
+        pairs = [list(a) for a in zip(daily_time, dischargeValues)]
+        pairs = sorted(pairs, key=lambda x: x[0])
 
-            datesSensorDischarge = dates
-            sensorDischarge = discharge
+        observed_rt = pd.DataFrame(pairs, columns=['Datetime', 'Observed Streamflow'])
+        observed_rt.set_index('Datetime', inplace=True)
+        observed_rt = observed_rt.replace(r'^\s*$', np.NaN, regex=True)
+        observed_rt["Observed Streamflow"] = pd.to_numeric(observed_rt["Observed Streamflow"], downcast="float")
 
-            try:
-                # convert request into pandas DF
-                pairs = [list(a) for a in zip(datesObservedDischarge, observedDischarge)]
-                observed_rt = pd.DataFrame(pairs, columns=['Datetime', 'Observed (m3/s)'])
-                observed_rt.set_index('Datetime', inplace=True)
-                observed_rt = observed_rt.dropna()
-                observed_rt = observed_rt.groupby(observed_rt.index.strftime("%Y/%m/%d")).mean()
-                observed_rt.index = pd.to_datetime(observed_rt.index)
-                observed_rt.index = observed_rt.index.tz_localize('UTC')
-                observed_rt = observed_rt.loc[
-                    observed_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
-                observed_rt = observed_rt.dropna()
+        observed_rt[observed_rt < 0] = 0
 
-                if len(observed_rt.index) > 0:
-                    hydroviewer_figure.add_trace(go.Scatter(
-                        name='Observed Streamflow',
-                        x=observed_rt.index,
-                        y=observed_rt.iloc[:, 0].values,
-                        line=dict(
-                            color='green',
-                        )
-                    ))
+        observed_rt.index = observed_rt.index.to_series().dt.strftime("%Y-%m-%d")
 
-            except:
-                print('Not observed data for the selected station')
+        observed_rt.index = pd.to_datetime(observed_rt.index)
 
-            try:
-                # convert request into pandas DF
-                pairs = [list(a) for a in zip(datesSensorDischarge, sensorDischarge)]
-                sensor_rt = pd.DataFrame(pairs, columns=['Datetime', 'Sensor (m3/s)'])
-                sensor_rt.set_index('Datetime', inplace=True)
-                sensor_rt = sensor_rt.dropna()
-                sensor_rt = sensor_rt.groupby(sensor_rt.index.strftime("%Y/%m/%d")).mean()
-                sensor_rt.index = pd.to_datetime(sensor_rt.index)
-                sensor_rt.index = sensor_rt.index.tz_localize('UTC')
-                sensor_rt = sensor_rt.loc[
-                    sensor_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
-                sensor_rt = sensor_rt.dropna()
+        observed_rt = observed_rt.dropna()
+        observed_rt = observed_rt.groupby(observed_rt.index.strftime("%Y/%m/%d")).mean()
+        observed_rt.index = pd.to_datetime(observed_rt.index)
+        observed_rt.index = observed_rt.index.tz_localize('UTC')
+        observed_rt = observed_rt.loc[observed_rt.index >= pd.to_datetime(forecast_df.index[0] - dt.timedelta(days=7))]
+        observed_rt = observed_rt.dropna()
 
-                if len(sensor_rt.index) > 0:
-                    hydroviewer_figure.add_trace(go.Scatter(
-                        name='Sensor Streamflow',
-                        x=sensor_rt.index,
-                        y=sensor_rt.iloc[:, 0].values,
-                        line=dict(
-                            color='yellow',
-                        )
-                    ))
-
-            except:
-                print('Not sensor data for the selected station')
+        if len(observed_rt.index) > 0:
+            hydroviewer_figure.add_trace(go.Scatter(
+                name='Observed Streamflow',
+                x=observed_rt.index,
+                y=observed_rt.iloc[:, 0].values,
+                line=dict(
+                    color='green',
+                )
+            ))
 
         chart_obj = PlotlyView(hydroviewer_figure)
 
@@ -5084,19 +5624,349 @@ def get_observed_discharge_csv(request):
         codEstacion = get_data['stationcode']
         nomEstacion = get_data['stationname']
 
-        url = 'https://www.hydroshare.org/resource/d222676fbd984a81911761ca1ba936bf/data/contents/Discharge_Data/{0}.csv'.format(
-            codEstacion)
+        '''Get Observed Data'''
 
-        s = requests.get(url, verify=False).content
+        now = dt.datetime.now()
+        YYYY = str(now.year)
+        MM = str(now.month)
+        DD = now.day
 
-        df = pd.read_csv(io.StringIO(s.decode('utf-8')), index_col=0)
-        df.index = pd.to_datetime(df.index)
+        url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao={0}&DataInicio=01/01/1900&DataFim={1}/{2}/{3}&tipoDados=3&nivelConsistencia=1'.format(
+            codEstacion, DD, MM, YYYY)
 
-        datesObservedDischarge = df.index.tolist()
-        observedDischarge = df.iloc[:, 0].values
-        observedDischarge.tolist()
+        response = requests.get(url, verify=False)
 
-        pairs = [list(a) for a in zip(datesObservedDischarge, observedDischarge)]
+        soup = BeautifulSoup(response.content, "xml")
+        times = soup.find_all('DataHora')
+        valuesDay01 = soup.find_all('Vazao01')
+        valuesDay02 = soup.find_all('Vazao02')
+        valuesDay03 = soup.find_all('Vazao03')
+        valuesDay04 = soup.find_all('Vazao04')
+        valuesDay05 = soup.find_all('Vazao05')
+        valuesDay06 = soup.find_all('Vazao06')
+        valuesDay07 = soup.find_all('Vazao07')
+        valuesDay08 = soup.find_all('Vazao08')
+        valuesDay09 = soup.find_all('Vazao09')
+        valuesDay10 = soup.find_all('Vazao10')
+        valuesDay11 = soup.find_all('Vazao11')
+        valuesDay12 = soup.find_all('Vazao12')
+        valuesDay13 = soup.find_all('Vazao13')
+        valuesDay14 = soup.find_all('Vazao14')
+        valuesDay15 = soup.find_all('Vazao15')
+        valuesDay16 = soup.find_all('Vazao16')
+        valuesDay17 = soup.find_all('Vazao17')
+        valuesDay18 = soup.find_all('Vazao18')
+        valuesDay19 = soup.find_all('Vazao19')
+        valuesDay20 = soup.find_all('Vazao20')
+        valuesDay21 = soup.find_all('Vazao21')
+        valuesDay22 = soup.find_all('Vazao22')
+        valuesDay23 = soup.find_all('Vazao23')
+        valuesDay24 = soup.find_all('Vazao24')
+        valuesDay25 = soup.find_all('Vazao25')
+        valuesDay26 = soup.find_all('Vazao26')
+        valuesDay27 = soup.find_all('Vazao27')
+        valuesDay28 = soup.find_all('Vazao28')
+        valuesDay29 = soup.find_all('Vazao29')
+        valuesDay30 = soup.find_all('Vazao30')
+        valuesDay31 = soup.find_all('Vazao31')
+
+        monthly__time = []
+        values01 = []
+        values02 = []
+        values03 = []
+        values04 = []
+        values05 = []
+        values06 = []
+        values07 = []
+        values08 = []
+        values09 = []
+        values10 = []
+        values11 = []
+        values12 = []
+        values13 = []
+        values14 = []
+        values15 = []
+        values16 = []
+        values17 = []
+        values18 = []
+        values19 = []
+        values20 = []
+        values21 = []
+        values22 = []
+        values23 = []
+        values24 = []
+        values25 = []
+        values26 = []
+        values27 = []
+        values28 = []
+        values29 = []
+        values30 = []
+        values31 = []
+
+        for i in range(0, len(times)):
+            monthlyTime = times[i].next
+            monthly__time.append(monthlyTime)
+            value01 = valuesDay01[i].next
+            values01.append(value01)
+            value02 = valuesDay02[i].next
+            values02.append(value02)
+            value03 = valuesDay03[i].next
+            values03.append(value03)
+            value04 = valuesDay04[i].next
+            values04.append(value04)
+            value05 = valuesDay05[i].next
+            values05.append(value05)
+            value06 = valuesDay06[i].next
+            values06.append(value06)
+            value07 = valuesDay07[i].next
+            values07.append(value07)
+            value08 = valuesDay08[i].next
+            values08.append(value08)
+            value09 = valuesDay09[i].next
+            values09.append(value09)
+            value10 = valuesDay10[i].next
+            values10.append(value10)
+            value11 = valuesDay11[i].next
+            values11.append(value11)
+            value12 = valuesDay12[i].next
+            values12.append(value12)
+            value13 = valuesDay13[i].next
+            values13.append(value13)
+            value14 = valuesDay14[i].next
+            values14.append(value14)
+            value15 = valuesDay15[i].next
+            values15.append(value15)
+            value16 = valuesDay16[i].next
+            values16.append(value16)
+            value17 = valuesDay17[i].next
+            values17.append(value17)
+            value18 = valuesDay18[i].next
+            values18.append(value18)
+            value19 = valuesDay19[i].next
+            values19.append(value19)
+            value20 = valuesDay20[i].next
+            values20.append(value20)
+            value21 = valuesDay21[i].next
+            values21.append(value21)
+            value22 = valuesDay22[i].next
+            values22.append(value22)
+            value23 = valuesDay23[i].next
+            values23.append(value23)
+            value24 = valuesDay24[i].next
+            values24.append(value24)
+            value25 = valuesDay25[i].next
+            values25.append(value25)
+            value26 = valuesDay26[i].next
+            values26.append(value26)
+            value27 = valuesDay27[i].next
+            values27.append(value27)
+            value28 = valuesDay28[i].next
+            values28.append(value28)
+            value29 = valuesDay29[i].next
+            values29.append(value29)
+            value30 = valuesDay30[i].next
+            values30.append(value30)
+            value31 = valuesDay31[i].next
+            values31.append(value31)
+
+        daily_time = []
+        monthly_time = []
+
+        for i in range(0, len(monthly__time)):
+            year = int(monthly__time[i][0:4])
+            month = int(monthly__time[i][5:7])
+            day = int(monthly__time[i][8:10])
+            if day != 1:
+                day = 1
+            hh = int(monthly__time[i][11:13])
+            mm = int(monthly__time[i][14:16])
+            ss = int(monthly__time[i][17:19])
+            monthlyTime = dt.datetime(year, month, day, hh, mm)
+            monthly_time.append(monthlyTime)
+            if month == 1:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 2:
+                if calendar.isleap(year):
+                    for j in range(0, 29):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+                else:
+                    for j in range(0, 28):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+            elif month == 3:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 4:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 5:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 6:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 7:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 8:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 9:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 10:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 11:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 12:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+
+        dischargeValues = []
+
+        for date in daily_time:
+            if date.day == 1:
+                discharge = values01[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 2:
+                discharge = values02[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 1, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 3:
+                discharge = values03[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 2, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 4:
+                discharge = values04[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 3, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 5:
+                discharge = values05[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 4, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 6:
+                discharge = values06[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 5, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 7:
+                discharge = values07[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 6, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 8:
+                discharge = values08[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 7, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 9:
+                discharge = values09[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 8, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 10:
+                discharge = values10[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 9, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 11:
+                discharge = values11[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 10, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 12:
+                discharge = values12[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 11, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 13:
+                discharge = values13[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 12, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 14:
+                discharge = values14[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 13, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 15:
+                discharge = values15[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 14, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 16:
+                discharge = values16[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 15, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 17:
+                discharge = values17[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 16, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 18:
+                discharge = values18[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 17, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 19:
+                discharge = values19[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 18, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 20:
+                discharge = values20[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 19, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 21:
+                discharge = values21[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 20, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 22:
+                discharge = values22[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 21, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 23:
+                discharge = values23[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 22, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 24:
+                discharge = values24[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 23, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 25:
+                discharge = values25[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 24, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 26:
+                discharge = values26[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 25, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 27:
+                discharge = values27[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 26, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 28:
+                discharge = values28[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 27, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 29:
+                discharge = values29[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 28, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 30:
+                discharge = values30[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 29, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 31:
+                discharge = values31[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 30, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+
+        pairs = [list(a) for a in zip(daily_time, dischargeValues)]
+        pairs = sorted(pairs, key=lambda x: x[0])
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=observed_discharge_{0}.csv'.format(codEstacion)
@@ -5185,22 +6055,358 @@ def get_simulated_bc_discharge_csv(request):
 
         '''Get Observed Data'''
 
-        url = 'https://www.hydroshare.org/resource/d222676fbd984a81911761ca1ba936bf/data/contents/Discharge_Data/{0}.csv'.format(
-            codEstacion)
+        now = dt.datetime.now()
+        YYYY = str(now.year)
+        MM = str(now.month)
+        DD = now.day
 
-        s = requests.get(url, verify=False).content
+        url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao={0}&DataInicio=01/01/1900&DataFim={1}/{2}/{3}&tipoDados=3&nivelConsistencia=1'.format(
+            codEstacion, DD, MM, YYYY)
 
-        df = pd.read_csv(io.StringIO(s.decode('utf-8')), index_col=0)
-        df.index = pd.to_datetime(df.index)
+        response = requests.get(url, verify=False)
 
-        datesDischarge = df.index.tolist()
-        dataDischarge = df.iloc[:, 0].values
-        dataDischarge.tolist()
+        soup = BeautifulSoup(response.content, "xml")
+        times = soup.find_all('DataHora')
+        valuesDay01 = soup.find_all('Vazao01')
+        valuesDay02 = soup.find_all('Vazao02')
+        valuesDay03 = soup.find_all('Vazao03')
+        valuesDay04 = soup.find_all('Vazao04')
+        valuesDay05 = soup.find_all('Vazao05')
+        valuesDay06 = soup.find_all('Vazao06')
+        valuesDay07 = soup.find_all('Vazao07')
+        valuesDay08 = soup.find_all('Vazao08')
+        valuesDay09 = soup.find_all('Vazao09')
+        valuesDay10 = soup.find_all('Vazao10')
+        valuesDay11 = soup.find_all('Vazao11')
+        valuesDay12 = soup.find_all('Vazao12')
+        valuesDay13 = soup.find_all('Vazao13')
+        valuesDay14 = soup.find_all('Vazao14')
+        valuesDay15 = soup.find_all('Vazao15')
+        valuesDay16 = soup.find_all('Vazao16')
+        valuesDay17 = soup.find_all('Vazao17')
+        valuesDay18 = soup.find_all('Vazao18')
+        valuesDay19 = soup.find_all('Vazao19')
+        valuesDay20 = soup.find_all('Vazao20')
+        valuesDay21 = soup.find_all('Vazao21')
+        valuesDay22 = soup.find_all('Vazao22')
+        valuesDay23 = soup.find_all('Vazao23')
+        valuesDay24 = soup.find_all('Vazao24')
+        valuesDay25 = soup.find_all('Vazao25')
+        valuesDay26 = soup.find_all('Vazao26')
+        valuesDay27 = soup.find_all('Vazao27')
+        valuesDay28 = soup.find_all('Vazao28')
+        valuesDay29 = soup.find_all('Vazao29')
+        valuesDay30 = soup.find_all('Vazao30')
+        valuesDay31 = soup.find_all('Vazao31')
 
-        if isinstance(dataDischarge[0], str):
-            dataDischarge = map(float, dataDischarge)
+        monthly__time = []
+        values01 = []
+        values02 = []
+        values03 = []
+        values04 = []
+        values05 = []
+        values06 = []
+        values07 = []
+        values08 = []
+        values09 = []
+        values10 = []
+        values11 = []
+        values12 = []
+        values13 = []
+        values14 = []
+        values15 = []
+        values16 = []
+        values17 = []
+        values18 = []
+        values19 = []
+        values20 = []
+        values21 = []
+        values22 = []
+        values23 = []
+        values24 = []
+        values25 = []
+        values26 = []
+        values27 = []
+        values28 = []
+        values29 = []
+        values30 = []
+        values31 = []
 
-        observed_df = pd.DataFrame(data=dataDischarge, index=datesDischarge, columns=['Observed Streamflow'])
+        for i in range(0, len(times)):
+            monthlyTime = times[i].next
+            monthly__time.append(monthlyTime)
+            value01 = valuesDay01[i].next
+            values01.append(value01)
+            value02 = valuesDay02[i].next
+            values02.append(value02)
+            value03 = valuesDay03[i].next
+            values03.append(value03)
+            value04 = valuesDay04[i].next
+            values04.append(value04)
+            value05 = valuesDay05[i].next
+            values05.append(value05)
+            value06 = valuesDay06[i].next
+            values06.append(value06)
+            value07 = valuesDay07[i].next
+            values07.append(value07)
+            value08 = valuesDay08[i].next
+            values08.append(value08)
+            value09 = valuesDay09[i].next
+            values09.append(value09)
+            value10 = valuesDay10[i].next
+            values10.append(value10)
+            value11 = valuesDay11[i].next
+            values11.append(value11)
+            value12 = valuesDay12[i].next
+            values12.append(value12)
+            value13 = valuesDay13[i].next
+            values13.append(value13)
+            value14 = valuesDay14[i].next
+            values14.append(value14)
+            value15 = valuesDay15[i].next
+            values15.append(value15)
+            value16 = valuesDay16[i].next
+            values16.append(value16)
+            value17 = valuesDay17[i].next
+            values17.append(value17)
+            value18 = valuesDay18[i].next
+            values18.append(value18)
+            value19 = valuesDay19[i].next
+            values19.append(value19)
+            value20 = valuesDay20[i].next
+            values20.append(value20)
+            value21 = valuesDay21[i].next
+            values21.append(value21)
+            value22 = valuesDay22[i].next
+            values22.append(value22)
+            value23 = valuesDay23[i].next
+            values23.append(value23)
+            value24 = valuesDay24[i].next
+            values24.append(value24)
+            value25 = valuesDay25[i].next
+            values25.append(value25)
+            value26 = valuesDay26[i].next
+            values26.append(value26)
+            value27 = valuesDay27[i].next
+            values27.append(value27)
+            value28 = valuesDay28[i].next
+            values28.append(value28)
+            value29 = valuesDay29[i].next
+            values29.append(value29)
+            value30 = valuesDay30[i].next
+            values30.append(value30)
+            value31 = valuesDay31[i].next
+            values31.append(value31)
+
+        daily_time = []
+        monthly_time = []
+
+        for i in range(0, len(monthly__time)):
+            year = int(monthly__time[i][0:4])
+            month = int(monthly__time[i][5:7])
+            day = int(monthly__time[i][8:10])
+            if day != 1:
+                day = 1
+            hh = int(monthly__time[i][11:13])
+            mm = int(monthly__time[i][14:16])
+            ss = int(monthly__time[i][17:19])
+            monthlyTime = dt.datetime(year, month, day, hh, mm)
+            monthly_time.append(monthlyTime)
+            if month == 1:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 2:
+                if calendar.isleap(year):
+                    for j in range(0, 29):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+                else:
+                    for j in range(0, 28):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+            elif month == 3:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 4:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 5:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 6:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 7:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 8:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 9:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 10:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 11:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 12:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+
+        dischargeValues = []
+
+        for date in daily_time:
+            if date.day == 1:
+                discharge = values01[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 2:
+                discharge = values02[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 1, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 3:
+                discharge = values03[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 2, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 4:
+                discharge = values04[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 3, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 5:
+                discharge = values05[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 4, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 6:
+                discharge = values06[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 5, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 7:
+                discharge = values07[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 6, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 8:
+                discharge = values08[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 7, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 9:
+                discharge = values09[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 8, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 10:
+                discharge = values10[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 9, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 11:
+                discharge = values11[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 10, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 12:
+                discharge = values12[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 11, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 13:
+                discharge = values13[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 12, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 14:
+                discharge = values14[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 13, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 15:
+                discharge = values15[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 14, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 16:
+                discharge = values16[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 15, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 17:
+                discharge = values17[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 16, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 18:
+                discharge = values18[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 17, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 19:
+                discharge = values19[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 18, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 20:
+                discharge = values20[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 19, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 21:
+                discharge = values21[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 20, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 22:
+                discharge = values22[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 21, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 23:
+                discharge = values23[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 22, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 24:
+                discharge = values24[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 23, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 25:
+                discharge = values25[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 24, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 26:
+                discharge = values26[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 25, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 27:
+                discharge = values27[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 26, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 28:
+                discharge = values28[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 27, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 29:
+                discharge = values29[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 28, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 30:
+                discharge = values30[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 29, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 31:
+                discharge = values31[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 30, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+
+        pairs = [list(a) for a in zip(daily_time, dischargeValues)]
+        pairs = sorted(pairs, key=lambda x: x[0])
+
+        observed_df = pd.DataFrame(pairs, columns=['Datetime', 'Observed Streamflow'])
+        observed_df.set_index('Datetime', inplace=True)
+        observed_df = observed_df.replace(r'^\s*$', np.NaN, regex=True)
+        observed_df["Observed Streamflow"] = pd.to_numeric(observed_df["Observed Streamflow"], downcast="float")
+
+        observed_df[observed_df < 0] = 0
+
+        observed_df.index = observed_df.index.to_series().dt.strftime("%Y-%m-%d")
+
+        observed_df.index = pd.to_datetime(observed_df.index)
 
         '''Correct the Bias in Sumulation'''
 
@@ -5284,22 +6490,358 @@ def get_forecast_bc_data_csv(request):
 
         '''Get Observed Data'''
 
-        url = 'https://www.hydroshare.org/resource/d222676fbd984a81911761ca1ba936bf/data/contents/Discharge_Data/{0}.csv'.format(
-            codEstacion)
+        now = dt.datetime.now()
+        YYYY = str(now.year)
+        MM = str(now.month)
+        DD = now.day
 
-        s = requests.get(url, verify=False).content
+        url = 'http://telemetriaws1.ana.gov.br/ServiceANA.asmx/HidroSerieHistorica?codEstacao={0}&DataInicio=01/01/1900&DataFim={1}/{2}/{3}&tipoDados=3&nivelConsistencia=1'.format(
+            codEstacion, DD, MM, YYYY)
 
-        df = pd.read_csv(io.StringIO(s.decode('utf-8')), index_col=0)
-        df.index = pd.to_datetime(df.index)
+        response = requests.get(url, verify=False)
 
-        datesDischarge = df.index.tolist()
-        dataDischarge = df.iloc[:, 0].values
-        dataDischarge.tolist()
+        soup = BeautifulSoup(response.content, "xml")
+        times = soup.find_all('DataHora')
+        valuesDay01 = soup.find_all('Vazao01')
+        valuesDay02 = soup.find_all('Vazao02')
+        valuesDay03 = soup.find_all('Vazao03')
+        valuesDay04 = soup.find_all('Vazao04')
+        valuesDay05 = soup.find_all('Vazao05')
+        valuesDay06 = soup.find_all('Vazao06')
+        valuesDay07 = soup.find_all('Vazao07')
+        valuesDay08 = soup.find_all('Vazao08')
+        valuesDay09 = soup.find_all('Vazao09')
+        valuesDay10 = soup.find_all('Vazao10')
+        valuesDay11 = soup.find_all('Vazao11')
+        valuesDay12 = soup.find_all('Vazao12')
+        valuesDay13 = soup.find_all('Vazao13')
+        valuesDay14 = soup.find_all('Vazao14')
+        valuesDay15 = soup.find_all('Vazao15')
+        valuesDay16 = soup.find_all('Vazao16')
+        valuesDay17 = soup.find_all('Vazao17')
+        valuesDay18 = soup.find_all('Vazao18')
+        valuesDay19 = soup.find_all('Vazao19')
+        valuesDay20 = soup.find_all('Vazao20')
+        valuesDay21 = soup.find_all('Vazao21')
+        valuesDay22 = soup.find_all('Vazao22')
+        valuesDay23 = soup.find_all('Vazao23')
+        valuesDay24 = soup.find_all('Vazao24')
+        valuesDay25 = soup.find_all('Vazao25')
+        valuesDay26 = soup.find_all('Vazao26')
+        valuesDay27 = soup.find_all('Vazao27')
+        valuesDay28 = soup.find_all('Vazao28')
+        valuesDay29 = soup.find_all('Vazao29')
+        valuesDay30 = soup.find_all('Vazao30')
+        valuesDay31 = soup.find_all('Vazao31')
 
-        if isinstance(dataDischarge[0], str):
-            dataDischarge = map(float, dataDischarge)
+        monthly__time = []
+        values01 = []
+        values02 = []
+        values03 = []
+        values04 = []
+        values05 = []
+        values06 = []
+        values07 = []
+        values08 = []
+        values09 = []
+        values10 = []
+        values11 = []
+        values12 = []
+        values13 = []
+        values14 = []
+        values15 = []
+        values16 = []
+        values17 = []
+        values18 = []
+        values19 = []
+        values20 = []
+        values21 = []
+        values22 = []
+        values23 = []
+        values24 = []
+        values25 = []
+        values26 = []
+        values27 = []
+        values28 = []
+        values29 = []
+        values30 = []
+        values31 = []
 
-        observed_df = pd.DataFrame(data=dataDischarge, index=datesDischarge, columns=['Observed Streamflow'])
+        for i in range(0, len(times)):
+            monthlyTime = times[i].next
+            monthly__time.append(monthlyTime)
+            value01 = valuesDay01[i].next
+            values01.append(value01)
+            value02 = valuesDay02[i].next
+            values02.append(value02)
+            value03 = valuesDay03[i].next
+            values03.append(value03)
+            value04 = valuesDay04[i].next
+            values04.append(value04)
+            value05 = valuesDay05[i].next
+            values05.append(value05)
+            value06 = valuesDay06[i].next
+            values06.append(value06)
+            value07 = valuesDay07[i].next
+            values07.append(value07)
+            value08 = valuesDay08[i].next
+            values08.append(value08)
+            value09 = valuesDay09[i].next
+            values09.append(value09)
+            value10 = valuesDay10[i].next
+            values10.append(value10)
+            value11 = valuesDay11[i].next
+            values11.append(value11)
+            value12 = valuesDay12[i].next
+            values12.append(value12)
+            value13 = valuesDay13[i].next
+            values13.append(value13)
+            value14 = valuesDay14[i].next
+            values14.append(value14)
+            value15 = valuesDay15[i].next
+            values15.append(value15)
+            value16 = valuesDay16[i].next
+            values16.append(value16)
+            value17 = valuesDay17[i].next
+            values17.append(value17)
+            value18 = valuesDay18[i].next
+            values18.append(value18)
+            value19 = valuesDay19[i].next
+            values19.append(value19)
+            value20 = valuesDay20[i].next
+            values20.append(value20)
+            value21 = valuesDay21[i].next
+            values21.append(value21)
+            value22 = valuesDay22[i].next
+            values22.append(value22)
+            value23 = valuesDay23[i].next
+            values23.append(value23)
+            value24 = valuesDay24[i].next
+            values24.append(value24)
+            value25 = valuesDay25[i].next
+            values25.append(value25)
+            value26 = valuesDay26[i].next
+            values26.append(value26)
+            value27 = valuesDay27[i].next
+            values27.append(value27)
+            value28 = valuesDay28[i].next
+            values28.append(value28)
+            value29 = valuesDay29[i].next
+            values29.append(value29)
+            value30 = valuesDay30[i].next
+            values30.append(value30)
+            value31 = valuesDay31[i].next
+            values31.append(value31)
+
+        daily_time = []
+        monthly_time = []
+
+        for i in range(0, len(monthly__time)):
+            year = int(monthly__time[i][0:4])
+            month = int(monthly__time[i][5:7])
+            day = int(monthly__time[i][8:10])
+            if day != 1:
+                day = 1
+            hh = int(monthly__time[i][11:13])
+            mm = int(monthly__time[i][14:16])
+            ss = int(monthly__time[i][17:19])
+            monthlyTime = dt.datetime(year, month, day, hh, mm)
+            monthly_time.append(monthlyTime)
+            if month == 1:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 2:
+                if calendar.isleap(year):
+                    for j in range(0, 29):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+                else:
+                    for j in range(0, 28):
+                        date = dt.datetime(year, month, j + 1, hh, mm)
+                        daily_time.append(date)
+            elif month == 3:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 4:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 5:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 6:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 7:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 8:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 9:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 10:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 11:
+                for j in range(0, 30):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+            elif month == 12:
+                for j in range(0, 31):
+                    date = dt.datetime(year, month, j + 1, hh, mm)
+                    daily_time.append(date)
+
+        dischargeValues = []
+
+        for date in daily_time:
+            if date.day == 1:
+                discharge = values01[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 2:
+                discharge = values02[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 1, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 3:
+                discharge = values03[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 2, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 4:
+                discharge = values04[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 3, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 5:
+                discharge = values05[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 4, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 6:
+                discharge = values06[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 5, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 7:
+                discharge = values07[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 6, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 8:
+                discharge = values08[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 7, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 9:
+                discharge = values09[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 8, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 10:
+                discharge = values10[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 9, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 11:
+                discharge = values11[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 10, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 12:
+                discharge = values12[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 11, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 13:
+                discharge = values13[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 12, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 14:
+                discharge = values14[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 13, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 15:
+                discharge = values15[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 14, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 16:
+                discharge = values16[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 15, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 17:
+                discharge = values17[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 16, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 18:
+                discharge = values18[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 17, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 19:
+                discharge = values19[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 18, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 20:
+                discharge = values20[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 19, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 21:
+                discharge = values21[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 20, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 22:
+                discharge = values22[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 21, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 23:
+                discharge = values23[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 22, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 24:
+                discharge = values24[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 23, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 25:
+                discharge = values25[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 24, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 26:
+                discharge = values26[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 25, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 27:
+                discharge = values27[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 26, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 28:
+                discharge = values28[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 27, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 29:
+                discharge = values29[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 28, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 30:
+                discharge = values30[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 29, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+            elif date.day == 31:
+                discharge = values31[
+                    monthly_time.index(dt.datetime(date.year, date.month, date.day - 30, date.hour, date.minute))]
+                dischargeValues.append(str(discharge))
+
+        pairs = [list(a) for a in zip(daily_time, dischargeValues)]
+        pairs = sorted(pairs, key=lambda x: x[0])
+
+        observed_df = pd.DataFrame(pairs, columns=['Datetime', 'Observed Streamflow'])
+        observed_df.set_index('Datetime', inplace=True)
+        observed_df = observed_df.replace(r'^\s*$', np.NaN, regex=True)
+        observed_df["Observed Streamflow"] = pd.to_numeric(observed_df["Observed Streamflow"], downcast="float")
+
+        observed_df[observed_df < 0] = 0
+
+        observed_df.index = observed_df.index.to_series().dt.strftime("%Y-%m-%d")
+
+        observed_df.index = pd.to_datetime(observed_df.index)
 
         '''Get Forecasts'''
         forecast_df = geoglows.streamflow.forecast_stats(comid, return_format='csv')
