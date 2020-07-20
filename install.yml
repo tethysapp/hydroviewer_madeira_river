@@ -17,6 +17,7 @@ requirements:
       - plotly
       - numpy
       - scipy
+      - bs4
 
   pip:
 
