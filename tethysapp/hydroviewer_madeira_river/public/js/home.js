@@ -56,7 +56,7 @@ function init_map() {
 		target: 'map',
 		layers: [base_layer, streams, stations],
 		//view: new ol.View({
-		//	center: ol.proj.fromLonLat([-74.08083, -4.598889]),
+		//	center: ol.proj.fromLonLat([-65.47315, -11.82455]),
 		//	zoom: 5
 		//})
 	});
