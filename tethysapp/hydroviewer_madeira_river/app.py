@@ -12,7 +12,7 @@ class HistoricalValidationToolColombia(TethysAppBase):
     package = 'hydroviewer_madeira_river'
     root_url = 'hydroviewer-madeira-river'
     color = '#002255'
-    description = 'This app evaluates the accuracy for the historical streamflow values obtained from Streamflow Prediction Tool in Madeira.'
+    description = 'This app evaluates the accuracy for the historical streamflow values obtained from Streamflow Prediction Tool in Madeira River Basin.'
     tags = ''
     enable_feedback = False
     feedback_emails = []
