@@ -1,7 +1,7 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
 
 
-class HistoricalValidationToolColombia(TethysAppBase):
+class HistoricalValidationToolMadeiraRiver(TethysAppBase):
     """
     Tethys app class for Historical Validation Tool Colombia.
     """
@@ -13,7 +13,7 @@ class HistoricalValidationToolColombia(TethysAppBase):
     root_url = 'hydroviewer-madeira-river'
     color = '#002255'
     description = 'This app evaluates the accuracy for the historical streamflow values obtained from Streamflow Prediction Tool in Madeira River Basin.'
-    tags = ''
+    tags = 'Hydrology'
     enable_feedback = False
     feedback_emails = []
 
